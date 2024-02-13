@@ -22,9 +22,11 @@ Mic_Distance_Start = np.zeros(MIC_COUNT, dtype=float)
 
 ##
 #
-# for mic in FORLOOPARR:
-#   mic[mic]
+# Mic_Distance_Start = dc.calcDistance(TOTAL_SPREAD,MIC_COUNT, SYS_OPP_DIS, SYS_ADJ_DIS)
 #
-#
-#
-#
+
+# minDis,minIndex = min(Mic_Dis_Start), argmin(Mic_Dis_Start)
+# maxDis, maxDis = max(Mic_Dis_Start), argmax(Mic_Dis_Start)
+
+Mic_Sample_Value = np.zeros(Mic_Count, dtype=float)
+
