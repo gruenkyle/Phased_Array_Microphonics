@@ -12,6 +12,8 @@ TOTAL_SPREAD = 10.0 # Total Spread of Phased Array from Mic 1 -> Mic N
 MIC_COUNT = 4 # Total Number of Microphones 
 SCALAR = TOTAL_SPREAD / (MIC_COUNT - 1) # Scalar Multiple For Equidistant Microphones
 
+code = 0424
+
 SYS_ADJ_DIST = 5 # Adjacent Distance from Left Most Microphone
 SYS_OPP_DIST = 7.5 #Opposite Distance from Left Most Microphone
 
@@ -31,8 +33,6 @@ Mic_Sample_Delay = dc.calcSample(Mic_Distance_Target, FS, maxIndex)
 # Process the Sound from Wav to CSV and store in numpy array
 
 mic_Signal_Cells = [np.array([]) for _ in range(MIC_COUNT)]
-
-code = 0424
 
 for mic in FORLOOPARR: 
     file_path = code + "/INDIV/mic_" + mic + "_" + code + ".wav" 
