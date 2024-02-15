@@ -25,12 +25,14 @@ minDis,minIndex = np.min(Mic_Distance_Target), np.argmin(Mic_Distance_Target)
 maxDis, maxIndex = np.max(Mic_Distance_Target), np.argmax(Mic_Distance_Target)
 
 # Calculate Mic Total Sample Values #
-Mic_Sample_Value = np.zeros(MIC_COUNT, dtype=float)
-Mic_Sample_Value = dc.calcSample(Mic_Distance_Target, FS, maxIndex)
+Mic_Sample_Delay = np.zeros(MIC_COUNT, dtype=float)
+Mic_Sample_Delay = dc.calcSample(Mic_Distance_Target, FS, maxIndex)
 
 # Process the Sound from Wav to CSV and store in numpy array
 
-micSignalCells = [np.array([]) for _ in range(MIC_COUNT)]
+mic_Signal_Cells = [np.array([]) for _ in range(MIC_COUNT)]
+
+#code = wc.genCode()
 
 for mic in FORLOOPARR: 
     #file_path = "../MICRECORD/" + code + "/INDIV/mic_" + mic + "_" + code + ".wav" 
@@ -41,21 +43,20 @@ maxSignalArrLengths = np.zeros(MIC_COUNT, dtype=int)
 
 for mic in FORLOOPARR:
     if (mic != maxIndex):
-        micSignalCells[mic] = np.append(np.zeros(int(totalSampleDelay[mic])), micSignalCells[mic])
-        maxSignalArrLengths[mic] = len(micSignalCells[mic])
+        mic_Signal_Cells[mic] = np.append(np.zeros(int(Mic_Sample_Delay[mic])), mic_Signal_Cells[mic])
+        maxSignalArrLengths[mic] = len(mic_Signal_Cells[mic])
 
 maxSize = np.max(maxSignalArrLengths)
 
 for mic in FORLOOPARR:
-    micSignalCells[mic] = np.append(micSignalCells[mic], np.zeros(int(maxSize - maxSignalArrLengths[mic])))
-    print(len(micSignalCells[mic]))
+    mic_Signal_Cells[mic] = np.append(mic_Signal_Cells[mic], np.zeros(int(maxSize - maxSignalArrLengths[mic])))
 
 micSumSignal = np.zeros(int(maxSize))
 for finalSummationMic in FORLOOPARR:
-    micSumSignal = micSumSignal + micSignalCells[int(finalSummationMic)]
+    micSumSignal = micSumSignal + mic_Signal_Cells[int(finalSummationMic)]
 
 # Create Mic Signal Folder # 
-# folderPath = "../MICRECORD/" + code + "/SUM/"
+# folderPath = "../MICRECORD/" + code + "/SUM_" + code + "/"
     
 # con.folderCreate(folderPath)
 # con.convertCSVWav(filePath, micSumSignal)
