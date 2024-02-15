@@ -32,12 +32,12 @@ Mic_Sample_Delay = dc.calcSample(Mic_Distance_Target, FS, maxIndex)
 
 mic_Signal_Cells = [np.array([]) for _ in range(MIC_COUNT)]
 
-#code = wc.genCode()
+code = 0424
 
 for mic in FORLOOPARR: 
-    #file_path = "../MICRECORD/" + code + "/INDIV/mic_" + mic + "_" + code + ".wav" 
-    #micSignalCells[mic] = con.convertWavCSV(file_path)
-    print("Mic Counted")
+    file_path = code + "/INDIV/mic_" + mic + "_" + code + ".wav" 
+    mic_Signal_Cells[mic] = con.convertWavCSV(file_path, FS)
+    print("Working")
 
 maxSignalArrLengths = np.zeros(MIC_COUNT, dtype=int)
 
