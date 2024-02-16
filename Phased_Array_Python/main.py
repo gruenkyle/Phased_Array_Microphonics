@@ -8,11 +8,11 @@ import numpy as np
 
 # FIELD VARIABLES # 
 FS = 44100 # AVG number of samples obtained per second (Sample Rate)
-TOTAL_SPREAD = 10.0 # Total Spread of Phased Array from Mic 1 -> Mic N
-MIC_COUNT = 4 # Total Number of Microphones 
+TOTAL_SPREAD = 15.0 # Total Spread of Phased Array from Mic 1 -> Mic N
+MIC_COUNT = 3 # Total Number of Microphones 
 SCALAR = TOTAL_SPREAD / (MIC_COUNT - 1) # Scalar Multiple For Equidistant Microphones
 
-code = 0424
+code = 1302
 
 SYS_ADJ_DIST = 5 # Adjacent Distance from Left Most Microphone
 SYS_OPP_DIST = 7.5 #Opposite Distance from Left Most Microphone
@@ -57,7 +57,7 @@ for finalSummationMic in FORLOOPARR:
 
 # Create Mic Signal Folder # 
 # folderPath = "../MICRECORD/" + code + "/SUM_" + code + "/"
-    
-# con.folderCreate(folderPath)
+folderPath = "../MICRECORD/" + code + "/SUM/FinalAudio_" + code + ".wav"
+con.convertCSVWav(folderPath, micSumSignal, FS)
 # con.convertCSVWav(filePath, micSumSignal)
     
