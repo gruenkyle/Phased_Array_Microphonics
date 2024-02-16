@@ -8,7 +8,7 @@ def convertWavCSV(file_path, FS):
         print("Wrong File Type")
         sys.exit()
 
-    samrate, data = wavfile.read('../MICRECORD/' + file_path)
+    samrate, data = wavfile.read(file_path)
     wavData = pd.DataFrame(data)
 
     if len(wavData.columns) == 2:

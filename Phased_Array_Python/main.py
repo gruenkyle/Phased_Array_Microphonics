@@ -8,14 +8,14 @@ import numpy as np
 
 # FIELD VARIABLES # 
 FS = 44100 # AVG number of samples obtained per second (Sample Rate)
-TOTAL_SPREAD = 15.0 # Total Spread of Phased Array from Mic 1 -> Mic N
+TOTAL_SPREAD = 13.716 # Total Spread of Phased Array from Mic 1 -> Mic N
 MIC_COUNT = 3 # Total Number of Microphones 
 SCALAR = TOTAL_SPREAD / (MIC_COUNT - 1) # Scalar Multiple For Equidistant Microphones
 
 code = 1302
 
-SYS_ADJ_DIST = 5 # Adjacent Distance from Left Most Microphone
-SYS_OPP_DIST = 7.5 #Opposite Distance from Left Most Microphone
+SYS_ADJ_DIST = 7.625 # Adjacent Distance from Left Most Microphone
+SYS_OPP_DIST = 6.858 #Opposite Distance from Left Most Microphone
 
 FORLOOPARR = np.arange(MIC_COUNT) #Looping Array for Mics
 
@@ -35,7 +35,7 @@ Mic_Sample_Delay = dc.calcSample(Mic_Distance_Target, FS, maxIndex)
 mic_Signal_Cells = [np.array([]) for _ in range(MIC_COUNT)]
 
 for mic in FORLOOPARR: 
-    file_path = code + "/INDIV/mic_" + mic + "_" + code + ".wav" 
+    file_path = "../MICRECORD/" + code + "/INDIV/mic_" + mic + "_" + code + ".wav" 
     mic_Signal_Cells[mic] = con.convertWavCSV(file_path, FS)
     print("Working")
 
