@@ -35,7 +35,7 @@ Mic_Sample_Delay = dc.calcSample(Mic_Distance_Target, FS, maxIndex)
 mic_Signal_Cells = [np.array([]) for _ in range(MIC_COUNT)]
 
 for mic in FORLOOPARR: 
-    file_path = "../MICRECORD/" + code + "/INDIV/mic_" + mic + "_" + code + ".wav" 
+    file_path = "../MICRECORD/" + code + "/INDIV/mic_" + mic + code + ".wav" 
     mic_Signal_Cells[mic] = con.convertWavCSV(file_path, FS)
     print("Working")
 
@@ -59,5 +59,3 @@ for finalSummationMic in FORLOOPARR:
 # folderPath = "../MICRECORD/" + code + "/SUM_" + code + "/"
 folderPath = "../MICRECORD/" + code + "/SUM/FinalAudio_" + code + ".wav"
 con.convertCSVWav(folderPath, micSumSignal, FS)
-# con.convertCSVWav(filePath, micSumSignal)
-    
