@@ -26,6 +26,6 @@ def convertWavCSV(file_path, FS):
     
 def convertCSVWav(file_path, micData, FS):
     df = pd.DataFrame(micData)
-    wavfile.write(file_path, FS, df)
+    wavfile.write(file_path, FS, df.astype(np.int32).values)
 
     
