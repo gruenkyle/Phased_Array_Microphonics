@@ -24,3 +24,12 @@ def summationFigure(micSummationArray, code):
     mpl.tight_layout()
     mpl.savefig(filePath)
 
+def overlappingFigure(micSummationArray, closestArray, code):
+    filePath = "../MICRECORD/" + str(code) + "/FIGS/Overlap_" + str(code) + ".png"
+    mpl.figure()
+    mpl.figure(figsize=(10, 6))
+    mpl.plot(micSummationArray, label="Summation", color="Blue")
+    mpl.plot(closestArray, label="Closest", color="black")
+
+    mpl.tight_layout()
+    mpl.savefig(filePath)
