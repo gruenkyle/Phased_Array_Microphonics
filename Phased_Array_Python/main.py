@@ -2,6 +2,7 @@
 import conversion as con
 import distanceCalc as dc
 import wavCollection as wc
+# import figureCreate as fc
 
 # Import Python Libraries #
 import numpy as np
@@ -44,6 +45,8 @@ for mic in FORLOOPARR:
     file_path = "../MICRECORD/" + str(code) + "/INDIV/Mic" + str(mic + 1) + "_" + str(code) + ".wav" 
     mic_Signal_Cells[mic] = con.convertWavCSV(file_path, FS)
     print("Working")
+
+# fc.multiFigure(mic_Signal_Cells, code)
 
 maxSignalArrLengths = np.zeros(MIC_COUNT, dtype=int)
 
