@@ -2,7 +2,7 @@
 import conversion as con
 import distanceCalc as dc
 import wavCollection as wc
-# import figureCreate as fc
+import figureCreate as fc
 
 # Import Python Libraries #
 import numpy as np
@@ -13,7 +13,7 @@ TOTAL_SPREAD = 13.716 # Total Spread of Phased Array from Mic 1 -> Mic N
 MIC_COUNT = 3 # Total Number of Microphones 
 SCALAR = TOTAL_SPREAD / (MIC_COUNT - 1) # Scalar Multiple For Equidistant Microphones
 
-code = 1302
+code = 2004
 
 SYS_ADJ_DIST = 7.625 # Adjacent Distance from Left Most Microphone
 SYS_OPP_DIST = 6.858 #Opposite Distance from Left Most Microphone
@@ -46,7 +46,7 @@ for mic in FORLOOPARR:
     mic_Signal_Cells[mic] = con.convertWavCSV(file_path, FS)
     print("Working")
 
-# fc.multiFigure(mic_Signal_Cells, code)
+fc.multiFigure(mic_Signal_Cells, code)
 
 maxSignalArrLengths = np.zeros(MIC_COUNT, dtype=int)
 
