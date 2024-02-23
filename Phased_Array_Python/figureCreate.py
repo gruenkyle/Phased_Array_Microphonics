@@ -7,7 +7,7 @@ def multiFigure(mic_signal_cells, code):
 
     mpl.figure()
     mpl.figure(figsize=(10, 6))
-
+ 
     for mic in FORLOOPARR:
         mpl.subplot(len(mic_signal_cells), 1, mic + 1)
         mpl.plot(mic_signal_cells[mic])   
