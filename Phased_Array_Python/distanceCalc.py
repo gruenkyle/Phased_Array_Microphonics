@@ -9,7 +9,7 @@
 #
 #######################################
 
-# ImporTOTAL_SPREAD #
+# Imports #
 import numpy as np
 
 # Field Variables #
