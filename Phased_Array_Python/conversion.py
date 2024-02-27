@@ -19,7 +19,7 @@ from scipy.io import wavfile
 # Conversion from Mono Wav to CSV array
 #
 # file_path(str) : File Path to wav file 
-# FS : Sample rate initialized in main method
+# FS(int) : Sample rate initialized in main method
 #
 # return -> numpy array of values from wav
 ##############
@@ -55,12 +55,12 @@ def convertWavCSV(file_path, FS):
 #
 # file_path(str) : File Path to output new wav file 
 # micData(numpy array) : array to be converted to wav
-# FS : Sample rate initialized in main method
+# FS(int) : Sample rate initialized in main method
 #
 # return -> numpy array of values from wav
 ############## 
 def convertCSVWav(file_path, micData, FS):
-    
+
     # Convert file to Pandas Data frame to wavfile.write() method 
     df = pd.DataFrame(micData)
     wavfile.write(file_path, FS, df.astype(np.int32).values)
