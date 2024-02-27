@@ -16,7 +16,7 @@ SCALAR = TOTAL_SPREAD / (MIC_COUNT - 1) # Scalar Multiple For Equidistant Microp
 code = 110300
 
 SYS_ADJ_DIST = 7.62 # Adjacent Distance from Left Most Microphone
-SYS_OPP_DIST =  #Opposite Distance from Left Most Microphone
+SYS_OPP_DIST = 15.24/2 #Opposite Distance from Left Most Microphone
 
 FORLOOPARR = np.arange(MIC_COUNT) #Looping Array for Mics
 
