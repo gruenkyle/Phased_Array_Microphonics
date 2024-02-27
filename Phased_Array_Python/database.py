@@ -20,6 +20,7 @@ database = pd.read_csv(filePathDB)
 
 def getInformation(code):
     # Find Row in dataframe that correlates to the code given #
+    information = database[database.CODE == code]
     return information
 
 print(getInformation(1034112000))
