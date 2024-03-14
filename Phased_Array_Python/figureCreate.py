@@ -5,7 +5,7 @@
 # inputs as well as extra summation graphs 
 #       or system setup diagrams
 #
-#       Author : Kyle Gruen
+#       Author : Kyle Gruen Yumna Rizvi
 #       Date : 02/27/2024
 #
 #######################################
@@ -13,6 +13,8 @@
 # Imports # 
 import numpy as np
 import matplotlib.pyplot as mpl
+import random
+import database as db
 
 
 ##############
@@ -84,3 +86,29 @@ def overlappingFigure(micSummationArray, closestArray, code):
     # Save figure to file path above #
     mpl.tight_layout()
     mpl.savefig(filePath)
+
+
+
+def generateDiagram(code):
+    filepath = "MicRECORD/"+ code +"FIGS/"
+    sysInfo = db.getInformation(code)
+    diagram = mpl.figure()
+    #spread/mic# = scalar
+    mic_value = 5  # replace with actual value of #mic through database
+    total_spread = 100  # replace with actual value of total spread through database
+    x = [i**total_spread for i in range(mic_value + 1)]
+    y_coordinates = [0]
+    mpl.ylim(-1, 15)
+    #diagram.plot(Target Sound)
+    diagram.plot(x, y_coordinates)
+    # Set y-axis limits
+    mpl.xlabel('Total Spread'+ total_spread)
+    mpl.ylabel('')
+    mpl.title('Diagram of Mics')
+    diagram.save(filepath)
+    
+# Comment about method here 
+def generate_data(mic_value, total_spread):
+    sysAdj = [random.uniform(0, total_spread) for _ in range(mic_value)]
+    sysOpp = [random.uniform(0, 15) for _ in range(mic_value)]
+    return sysAdj, sysOpp
