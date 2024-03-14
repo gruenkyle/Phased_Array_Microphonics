@@ -1,12 +1,8 @@
 import pandas as pd
 import numpy as np
 
-def noise_filter(closestArray, sumArray):
+def noise_filter(closestArray, sumArray, window_size=100):
     
-
-    # Set window size
-    window_size = 40
-
     # Create Pandas DataFrame for the arrays
     df = pd.DataFrame({'closest': closestArray, 'sum': sumArray})
 
@@ -24,11 +20,37 @@ def noise_filter(closestArray, sumArray):
 
     # Print the correlations array
     print("Correlations array:", correlations_array)
+    return correlations_array
+
+def noise_filter2(closest_array, sum_array, window_size=40):
+    num_elements = len(closest_array) - window_size + 1
+    
+    # Create a 2D array with rolling windows for both arrays
+    rolling_closest = np.lib.stride_tricks.sliding_window_view(closest_array, window_size)
+    rolling_sum = np.lib.stride_tricks.sliding_window_view(sum_array, window_size)
+    
+    # Compute correlations for each window
+    correlations = np.corrcoef(rolling_closest, rolling_sum, rowvar=False)
+    
+    # Extract the correlation coefficients between 'closest' and 'sum'
+    correlations = correlations[:-1, -1]
+    
+    return correlations
+
+
 
 # Assuming you have two arrays array1 and array2 with 44100 entries each
 # Generate random arrays for demonstration purposes
 array_size = 44100
-array1 = np.random.rand(array_size)
-array2 = np.random.rand(array_size)
+array1 = np.random.rand(1000)  # Example data
+array2 = np.random.rand(1000)  # Example data
 
-noise_filter(array1, array2)
+
+print(array1)
+print(array2)
+
+blah = noise_filter(array1, array2)
+print("blah", blah.size)
+guh = noise_filter2(array1, array2)
+print(guh, guh.size)
+print(guh.size)
