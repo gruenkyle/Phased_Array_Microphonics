@@ -105,6 +105,7 @@ def generateDiagram(code):
     mpl.title('Diagram of Mics')
     diagram.save(filepath)
     
+# Comment about method here 
 def generate_data(mic_value, total_spread):
     sysAdj = [random.uniform(0, total_spread) for _ in range(mic_value)]
     sysOpp = [random.uniform(0, 15) for _ in range(mic_value)]
