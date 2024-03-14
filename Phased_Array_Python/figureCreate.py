@@ -13,6 +13,8 @@
 # Imports # 
 import numpy as np
 import matplotlib.pyplot as mpl
+import random
+import database as db
 
 
 ##############
