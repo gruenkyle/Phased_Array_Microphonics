@@ -25,4 +25,5 @@ def getInformation(code):
     information = database[database['CODE'] == code]
     return information
 
+
 print(getInformation(1323500))
