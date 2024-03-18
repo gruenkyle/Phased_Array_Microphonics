@@ -20,7 +20,7 @@ import database as db
 import numpy as np
 
 # FIELD VARIABLES # 
-code = 1331801 # Unique Code Identification #
+code = 10323500 # Unique Code Identification #
 
 recordingInformation = db.getInformation(code) # Gather information about recording code 
 
