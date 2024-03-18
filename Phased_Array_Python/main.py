@@ -20,7 +20,7 @@ import database as db
 import numpy as np
 
 # FIELD VARIABLES # 
-code = 10323500 # Unique Code Identification #
+code = 10321802 # Unique Code Identification #
 
 recordingInformation = db.getInformation(code) # Gather information about recording code 
 
@@ -76,9 +76,9 @@ maxSize = np.max(maxSignalArrLengths)
 
 # Reallign all arrays to have equivalent sizes #
 for mic in FORLOOPARR:
-    print("Pre-zero : " + str(len(mic_Signal_Cells[mic])) + " for Mic #" + mic)
+    #print("Pre-zero : " + str(len(mic_Signal_Cells[mic])) + " for Mic #" + mic)
     mic_Signal_Cells[mic] = np.append(mic_Signal_Cells[mic], np.zeros(int(maxSize - len(mic_Signal_Cells[mic]))))
-    print("Post-zero : " + str(len(mic_Signal_Cells[mic])) + " for Mic #" + mic)
+    #print("Post-zero : " + str(len(mic_Signal_Cells[mic])) + " for Mic #" + mic)
 
 # Sum all audio signals into one large array #
 micSumSignal = np.zeros(int(maxSize))
