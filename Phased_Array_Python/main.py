@@ -13,22 +13,25 @@
 # Import External Scripts # 
 import conversion as con
 import distanceCalc as dc
-import wavCollection as wc
 import figureCreate as fc
+import database as db
 
 # Import Python Libraries #
 import numpy as np
 
 # FIELD VARIABLES # 
-FS = 44100 # AVG number of samples obtained per second (Sample Rate)
-TOTAL_SPREAD = 15.24 # Total Spread of Phased Array from Mic 1 -> Mic N
-MIC_COUNT = 3 # Total Number of Microphones 
+code = 1331801 # Unique Code Identification #
+
+recordingInformation = db.getInformation(code) # Gather information about recording code 
+
+FS = recordingInformation['SAMRATE'].iloc[0] # AVG number of samples obtained per second (Sample Rate)
+TOTAL_SPREAD = recordingInformation['TOTALSPREAD'].iloc[0] # Total Spread of Phased Array from Mic 1 -> Mic N
+MIC_COUNT = recordingInformation['MIC_COUNT'].iloc[0] # Total Number of Microphones 
+
 SCALAR = TOTAL_SPREAD / (MIC_COUNT - 1) # Scalar Multiple For Equidistant Microphones
 
-code = 110300 # Unique Code Identification #
-
-SYS_ADJ_DIST = 7.62 # Adjacent Distance to Target from Left Most Microphone
-SYS_OPP_DIST = 15.24/2 # Opposite Distance to Target from Left Most Microphone
+SYS_ADJ_DIST = recordingInformation['SAD'].iloc[0] # Adjacent Distance to Target from Left Most Microphone
+SYS_OPP_DIST = recordingInformation['SOD'].iloc[0] # Opposite Distance to Target from Left Most Microphone
 
 FORLOOPARR = np.arange(MIC_COUNT) # Iteration Array For Number of Microphones
 
