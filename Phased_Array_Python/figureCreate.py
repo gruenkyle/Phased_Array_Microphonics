@@ -90,18 +90,20 @@ def overlappingFigure(micSummationArray, closestArray, code):
 
 
 def generateDiagram(code):
-    filepath = "MicRECORD/"+ code +"FIGS/"
+    filepath = "../MicRECORD/"+ code +"/FIGS/" + code + "_Diagram"
     sysInfo = db.getInformation(code)
     diagram = mpl.figure()
     #spread/mic# = scalar
-    mic_value = 5  # replace with actual value of #mic through database
-    total_spread = 100  # replace with actual value of total spread through database
-    x = [i**total_spread for i in range(mic_value + 1)]
-    y_coordinates = [0]
+    mic_value = sysInfo.MIC_COUNT  # replace with actual value of #mic through database
+    total_spread = sysInfo.TOTALSPREAD  # replace with actual value of total spread through database
+    #scalar = sysInfo.scalar
+    v = sysInfo.TOTALSPREAD/ (sysInfo.Mic_COUNT - 1)
+    x = [0, i*v for i in range(mic_value)]
+    y_coordinates = np.zeros(sysInfo.MIC_COUNT, dtype=int)
     mpl.ylim(-1, 15)
     #diagram.plot(Target Sound)
     diagram.plot(x, y_coordinates)
-    # Set y-axis limits
+   # Set y-axis limits
     mpl.xlabel('Total Spread'+ total_spread)
     mpl.ylabel('')
     mpl.title('Diagram of Mics')
@@ -111,4 +113,4 @@ def generateDiagram(code):
 def generate_data(mic_value, total_spread):
     sysAdj = [random.uniform(0, total_spread) for _ in range(mic_value)]
     sysOpp = [random.uniform(0, 15) for _ in range(mic_value)]
-    return sysAdj, sysOpp
+    mpl.plot(sysAdj, sysOpp)
