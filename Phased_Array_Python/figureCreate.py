@@ -94,12 +94,12 @@ def generateDiagram(code):
     sysInfo = db.getInformation(code)
     diagram = mpl.figure()
     #spread/mic# = scalar
-    mic_value = sysInfo.MIC_COUNT  # replace with actual value of #mic through database
-    total_spread = sysInfo.TOTALSPREAD  # replace with actual value of total spread through database
+    mic_value = ['MIC_COUNT'].iloc[0]  # replace with actual value of #mic through database
+    total_spread = ['TOTALSPREAD'].iloc[0]  # replace with actual value of total spread through database
     #scalar = sysInfo.scalar
-    v = sysInfo.TOTALSPREAD/ (sysInfo.Mic_COUNT - 1)
+    v = total_spread/ (mic_value - 1)
     x = [0, i*v for i in range(mic_value)]
-    y_coordinates = np.zeros(sysInfo.MIC_COUNT, dtype=int)
+    y_coordinates = np.zeros(mic_value, dtype=int)
     mpl.ylim(-1, 15)
     #diagram.plot(Target Sound)
     diagram.plot(x, y_coordinates)
