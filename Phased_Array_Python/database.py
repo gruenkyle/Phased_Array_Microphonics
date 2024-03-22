@@ -18,12 +18,11 @@ import pandas as pd
 filePathDB = "../MICRECORD/RecordingDatabase.txt"
 database = pd.read_csv(filePathDB)
 
-print(database)
-
 def getInformation(code):
     # Find Row in dataframe that correlates to the code given #
     information = database[database['CODE'] == code]
     return information
 
-
-print(getInformation(1323500))
+def getCodes():
+    information = database['CODE']
+    return information

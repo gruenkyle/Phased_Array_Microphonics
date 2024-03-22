@@ -36,7 +36,8 @@ def convertWavCSV(file_path, FS):
 
     # ERROR CHECK : WavData must be Mono Recording not Stereo #
     if len(wavData.columns) == 2:
-        print('Stereo File not Compatible, Mono Recording Only')
+        print('Stereo File not Compatible, Mono Recording Only\n')
+        print(file_path)
         sys.exit()
 
     # ERROR CHECK : Passed Sample Rate and Wav Sample rate do not match # 
