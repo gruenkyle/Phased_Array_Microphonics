@@ -24,6 +24,8 @@ code = 10321802 # Unique Code Identification #
 
 recordingInformation = db.getInformation(code) # Gather information about recording code 
 
+fc.generateDiagram(code)
+
 FS = recordingInformation['SAMRATE'].iloc[0] # AVG number of samples obtained per second (Sample Rate)
 TOTAL_SPREAD = recordingInformation['TOTALSPREAD'].iloc[0] # Total Spread of Phased Array from Mic 1 -> Mic N
 MIC_COUNT = recordingInformation['MIC_COUNT'].iloc[0] # Total Number of Microphones 
