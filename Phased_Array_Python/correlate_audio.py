@@ -1,28 +1,8 @@
 import pandas as pd
 import numpy as np
 
-def noise_filter(closestArray, sumArray, window_size=100):
-    
-    # Create Pandas DataFrame for the arrays
-    df = pd.DataFrame({'closest': closestArray, 'sum': sumArray})
 
-    # Initialize an empty list to store correlations
-    correlations = []
-
-    # Iterate over the arrays with a sliding window using Pandas rolling window function
-    for window in df.rolling(window_size):
-        # Skip the first (window_size - 1) correlations since they are not calculated due to rolling window
-        if len(window) == window_size:
-            correlations.append(window['closest'].corr(window['sum']))
-
-    # Convert the list of correlations to a NumPy array
-    correlations_array = np.array(correlations)
-
-    # Print the correlations array
-    print("Correlations array:", correlations_array)
-    return correlations_array
-
-def noise_filter2(closest_array, sum_array, window_size=40):
+def noise_filter(closest_array, sum_array, window_size=40):
 
     corr = []
 
@@ -61,5 +41,5 @@ array2 = np.random.rand(1000)  # Example data
 #blah = noise_filter(array1, array2)
 #print("size of noise filter 1: ", blah.size)
 
-guh = noise_filter2(array1, array2)
+guh = noise_filter(array1, array2)
 print("size of noise filter 2: ", len(guh))
