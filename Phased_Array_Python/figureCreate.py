@@ -101,12 +101,14 @@ def generateDiagram(code):
     x = [i*v for i in range(mic_value)]
     y_coordinates = np.zeros(mic_value, dtype=int)
     mpl.ylim(-1, 15)
+    microphone_emoji = '\U0001F399'  # Unicode for studio microphone emoji
     #diagram.plot(Target Sound)
-    mpl.scatter(x, y_coordinates)
-    mpl.scatter(sysInfo['SOD'], sysInfo['SAD'])
+    mpl.scatter(x, y_coordinates, label = 'Microphones', marker = microphone_emoji)
+    mpl.scatter(sysInfo['SOD'], sysInfo['SAD'], label = 'Target Sound')
     # Set y-axis limits
     mpl.xlabel('Total Spread'+ str(total_spread))
     mpl.ylabel('')
     mpl.title('Diagram of Mics')
+    mpl.legend(loc='upper right')
     mpl.savefig(filepath)
     mpl.close('all')
