@@ -88,26 +88,33 @@ def overlappingFigure(micSummationArray, closestArray, code):
     mpl.savefig(filePath)
 
 
-
+##############
+# Creates and saves figure of the scalar, spread, and optimal amount of microphones
+# generateDiagram(code) = gets data from filepath for diagram
+# code(int) = numerical code for current recording / storage
+#
+# file_output <- matplot figure 
+##############
 def generateDiagram(code):
+    # Create File Path #
     filepath = "../MicRECORD/"+ str(code) +"/FIGS/" + str(code) + "_Diagram.png"
     sysInfo = db.getInformation(code)
     mpl.figure()
-    #spread/mic# = scalar
-    mic_value = sysInfo['MIC_COUNT'].iloc[0]  # replace with actual value of #mic through database
-    total_spread = sysInfo['TOTALSPREAD'].iloc[0]  # replace with actual value of total spread through database
-    #scalar = sysInfo.scalar
-    v = total_spread/ (mic_value - 1)
-    x = [i*v for i in range(mic_value)]
-    y_coordinates = np.zeros(mic_value, dtype=int)
-    mpl.ylim(-1, 15)
-    microphone_emoji = '\U0001F399'  # Unicode for studio microphone emoji
-    #diagram.plot(Target Sound)
-    mpl.scatter(x, y_coordinates, label = 'Microphones', marker = microphone_emoji)
+    
+    # Initialize variables
+    mic_value = sysInfo['MIC_COUNT'].iloc[0]  
+    total_spread = sysInfo['TOTALSPREAD'].iloc[0]  
+    SCALAR = total_spread/ (mic_value - 1)
+    x = [i*SCALAR for i in range(mic_value)]
+    y = np.zeros(mic_value, dtype=int)
+    MIC_EMOJI = '\U0001F399'  
+    
+    # Display plot
+    mpl.scatter(x, y, label = 'Microphones', marker = MIC_EMOJI)
     mpl.scatter(sysInfo['SOD'], sysInfo['SAD'], label = 'Target Sound')
-    # Set y-axis limits
-    mpl.xlabel('Total Spread'+ str(total_spread))
+    mpl.xlabel('Total Spread'+ ' ' + str(total_spread))
     mpl.ylabel('')
+    mpl.ylim(-1, 15)
     mpl.title('Diagram of Mics')
     mpl.legend(loc='upper right')
     mpl.savefig(filepath)
