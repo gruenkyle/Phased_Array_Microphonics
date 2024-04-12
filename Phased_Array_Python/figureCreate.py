@@ -37,7 +37,13 @@ def multiFigure(mic_signal_cells, code):
     # Plot each microphone data on subplot #
     for mic in FORLOOPARR:
         mpl.subplot(len(mic_signal_cells), 1, mic + 1)
-        mpl.plot(mic_signal_cells[mic])   
+        mpl.plot(mic_signal_cells[mic], color='brown')   
+
+    #yumna added:
+    # Add grid lines to the plot #
+    mpl.grid(True, linestyle='--', color='gray', alpha=0.5)
+    # Change background color to beige #
+    mpl.gca().set_facecolor('#F5F5DC')  # Hex code for beige
 
     # Save figure to filepath above #
     mpl.tight_layout()
@@ -58,7 +64,13 @@ def summationFigure(micSummationArray, code):
     # Create Figure and Plot #
     mpl.figure()
     mpl.figure(figsize=(10, 6))
-    mpl.plot(micSummationArray)
+    mpl.plot(micSummationArray, color='brown')
+
+    #yumna added:
+    # Add grid lines to the plot #
+    mpl.grid(True, linestyle='--', color='gray', alpha=0.5)
+    # Change background color to beige #
+    mpl.gca().set_facecolor('#F5F5DC')  # Hex code for beige
 
     # Save to file path above #
     mpl.tight_layout()
@@ -80,13 +92,18 @@ def overlappingFigure(micSummationArray, closestArray, code):
     # Create figure object and plot mic summation behind closest array #
     mpl.figure()
     mpl.figure(figsize=(10, 6))
-    mpl.plot(micSummationArray, label="Summation", color="Blue")
+    mpl.plot(micSummationArray, label="Summation", color="brown")
     mpl.plot(closestArray, label="Closest", color="black")
+
+    #yumna added:
+    # Add grid lines to the plot #
+    mpl.grid(True, linestyle='--', color='gray', alpha=0.5)
+    # Change background color to beige #
+    mpl.gca().set_facecolor('#F5F5DC')  # Hex code for beige
 
     # Save figure to file path above #
     mpl.tight_layout()
     mpl.savefig(filePath)
-
 
 ##############
 # Creates and saves figure of the scalar, spread, and optimal amount of microphones
@@ -108,8 +125,14 @@ def generateDiagram(code):
     x = [i*SCALAR for i in range(mic_value)]
     y = np.zeros(mic_value, dtype=int)
     MIC_EMOJI = '\U0001F399'  
+
+    #yumna added:
+    # Add grid lines to the plot #
+    mpl.grid(True, linestyle='--', color='gray', alpha=0.5)
+    # Change background color to beige #
+    mpl.gca().set_facecolor('#F5F5DC')  # Hex code for beige
     
-    # Display plot
+    # Plot mic values with respect to spread
     mpl.scatter(x, y, label = 'Microphones', marker = MIC_EMOJI)
     mpl.scatter(sysInfo['SOD'], sysInfo['SAD'], label = 'Target Sound')
     mpl.xlabel('Total Spread'+ ' ' + str(total_spread))
