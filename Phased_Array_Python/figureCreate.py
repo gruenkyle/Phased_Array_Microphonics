@@ -38,12 +38,13 @@ def multiFigure(mic_signal_cells, code):
     for mic in FORLOOPARR:
         mpl.subplot(len(mic_signal_cells), 1, mic + 1)
         mpl.plot(mic_signal_cells[mic], color='brown')   
+        mpl.grid(True, linestyle='--', color='gray', alpha=0.5)
+        # Change background color to beige #
+        mpl.gca().set_facecolor('#F5F5DC')  # Hex code for beige
+        mpl.xlabel('Number of Samples')
+        mpl.ylabel('Amplitude')
 
     #yumna added:
-    # Add grid lines to the plot #
-    mpl.grid(True, linestyle='--', color='gray', alpha=0.5)
-    # Change background color to beige #
-    mpl.gca().set_facecolor('#F5F5DC')  # Hex code for beige
 
     # Save figure to filepath above #
     mpl.tight_layout()
@@ -65,6 +66,8 @@ def summationFigure(micSummationArray, code):
     mpl.figure()
     mpl.figure(figsize=(10, 6))
     mpl.plot(micSummationArray, color='brown')
+    mpl.xlabel('Number of Samples')
+    mpl.ylabel('Amplitude')
 
     #yumna added:
     # Add grid lines to the plot #
@@ -94,6 +97,8 @@ def overlappingFigure(micSummationArray, closestArray, code):
     mpl.figure(figsize=(10, 6))
     mpl.plot(micSummationArray, label="Summation", color="brown")
     mpl.plot(closestArray, label="Closest", color="black")
+    mpl.xlabel('Number of Samples')
+    mpl.ylabel('Amplitude')
 
     #yumna added:
     # Add grid lines to the plot #
@@ -124,7 +129,7 @@ def generateDiagram(code):
     SCALAR = total_spread/ (mic_value - 1)
     x = [i*SCALAR for i in range(mic_value)]
     y = np.zeros(mic_value, dtype=int)
-    MIC_EMOJI = '\U0001F399'  
+    #MIC_EMOJI = '\U0001F399'  
 
     #yumna added:
     # Add grid lines to the plot #
@@ -133,12 +138,16 @@ def generateDiagram(code):
     mpl.gca().set_facecolor('#F5F5DC')  # Hex code for beige
     
     # Plot mic values with respect to spread
-    mpl.scatter(x, y, label = 'Microphones', marker = MIC_EMOJI)
-    mpl.scatter(sysInfo['SOD'], sysInfo['SAD'], label = 'Target Sound')
-    mpl.xlabel('Total Spread'+ ' ' + str(total_spread))
-    mpl.ylabel('')
+    mpl.scatter(x, y, label = 'Microphones', marker = "2", s=350)
+    mpl.scatter(sysInfo['SOD'], sysInfo['SAD'], label = 'Target Sound', s=50)
+    SAD = str(sysInfo['SAD'].iloc[0])
+    SOD = str(sysInfo['SOD'].iloc[0])
+
+    mpl.xlabel('Adjacent Distance to Target: ' + SAD)
+    mpl.ylabel('Opposite Distance to Target: ' + SOD)
+
     mpl.ylim(-1, 15)
-    mpl.title('Diagram of Mics')
+    mpl.title('Diagram of System - ' + str(code) + '\nTotal Spread'+ ' ' + str(total_spread) + ' : in Meters')
     mpl.legend(loc='upper right')
     mpl.savefig(filepath)
     mpl.close('all')
