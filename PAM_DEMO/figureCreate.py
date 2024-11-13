@@ -13,8 +13,6 @@
 # Imports # 
 import numpy as np
 import matplotlib.pyplot as mpl
-import random
-import database as db
 
 
 ##############
@@ -25,9 +23,9 @@ import database as db
 #
 # file_output <- matplot figure 
 ##############
-def multiFigure(mic_signal_cells, code):
+def multiFigure(mic_signal_cells, sysInfo):
     # Create storage filepath to store new figure #
-    filePath = "../MICRECORD/" + str(code) + "/FIGS/multi_" + str(code) + ".png"
+    filePath = "../MICRECORD/" + str(sysInfo['CODE'].iloc[0])  + "/FIGS/multi_" + str(sysInfo['CODE'].iloc[0])  + ".png"
     FORLOOPARR = np.arange(len(mic_signal_cells))
 
     # Create Figure Object #
@@ -44,8 +42,6 @@ def multiFigure(mic_signal_cells, code):
         mpl.xlabel('Number of Samples')
         mpl.ylabel('Amplitude')
 
-    #yumna added:
-
     # Save figure to filepath above #
     mpl.tight_layout()
     mpl.savefig(filePath)
@@ -58,9 +54,9 @@ def multiFigure(mic_signal_cells, code):
 #
 # file_output <- matplot figure 
 ##############
-def summationFigure(micSummationArray, code):
+def summationFigure(micSummationArray, sysInfo):
     # Create File Path #
-    filePath = "../MICRECORD/" + str(code) + "/FIGS/FinalSummation_" + str(code) + ".png"
+    filePath = "../MICRECORD/" + str(sysInfo['CODE'].iloc[0])  + "/FIGS/FinalSummation_" + str(sysInfo['CODE'].iloc[0])  + ".png"
 
     # Create Figure and Plot #
     mpl.figure()
@@ -88,9 +84,9 @@ def summationFigure(micSummationArray, code):
 #
 # file_output <- matplot figure 
 ##############
-def overlappingFigure(micSummationArray, closestArray, code):
+def overlappingFigure(micSummationArray, closestArray, sysInfo):
     # Create File Path for Storage #
-    filePath = "../MICRECORD/" + str(code) + "/FIGS/Overlap_" + str(code) + ".png"
+    filePath = "../MICRECORD/" + str(sysInfo['CODE'].iloc[0])  + "/FIGS/Overlap_" + str(sysInfo['CODE'].iloc[0])  + ".png"
 
     # Create figure object and plot mic summation behind closest array #
     mpl.figure()
@@ -117,10 +113,9 @@ def overlappingFigure(micSummationArray, closestArray, code):
 #
 # file_output <- matplot figure 
 ##############
-def generateDiagram(code):
+def generateDiagram(sysInfo):
     # Create File Path #
-    filepath = "../MicRECORD/"+ str(code) +"/FIGS/" + str(code) + "_Diagram.png"
-    sysInfo = db.getInformation(code)
+    filepath = "../MICRECORD/"+ str(sysInfo['CODE'].iloc[0]) + "/FIGS/" + str(sysInfo['CODE'].iloc[0])  + "_Diagram.png"
     mpl.figure()
     
     # Initialize variables
@@ -147,7 +142,7 @@ def generateDiagram(code):
     mpl.ylabel('Opposite Distance to Target: ' + SOD)
 
     mpl.ylim(-1, 15)
-    mpl.title('Diagram of System - ' + str(code) + '\nTotal Spread'+ ' ' + str(total_spread) + ' : in Meters')
+    mpl.title('Diagram of System - ' + str(sysInfo['CODE'].iloc[0]) + '\nTotal Spread'+ ' ' + str(total_spread) + ' : in Meters')
     mpl.legend(loc='upper right')
     mpl.savefig(filepath)
     mpl.close('all')
