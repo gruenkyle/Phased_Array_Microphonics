@@ -15,7 +15,7 @@ import pyaudio
 
 # threading: A module to run multiple threads allowing the GUI to remain responsive during recording.
 
- 
+# script will need 4 inputs to pass thru gui
 
 # Set the recording parameters
 
@@ -29,7 +29,7 @@ CHUNK = 1024               # Chunk size
 
 duration = 10              # Duration of the recording in seconds
 
-audio_file_path = "output3.wav"  # File to save the audio
+audio_file_path = "../MICRECORD/output3.wav"  # File to save the audio
 
 
 
@@ -115,13 +115,13 @@ def start_recording(recorder):
 
     threading.Thread(target=recorder.record_audio).start()
 
-  
+ 
 
 def save_recording(recorder):
 
     recorder.save_audio()
 
- #buttons 
+#buttons
 
 def on_record_button_click(recorder):
 
