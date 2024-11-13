@@ -29,7 +29,7 @@ CHUNK = 1024               # Chunk size
 
 duration = 10              # Duration of the recording in seconds
 
-audio_file_path = "output2.wav"  # File to save the audio
+audio_file_path = "output3.wav"  # File to save the audio
 
 
 
