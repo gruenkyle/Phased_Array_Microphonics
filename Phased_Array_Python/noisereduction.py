@@ -133,6 +133,42 @@ def on_record_button_click(recorder):
 
         print("Recording is already in progress.")
 
+
+def save_audio_channels(self):
+    """Saves each channel as a separate recording."""
+    if not self.frames:
+        print("No audio data available to save.")
+        return
+
+    # Initialize separate frames for each channel
+    left_channel_frames = []
+    right_channel_frames = []
+
+    # Split the interleaved audio frames
+    for frame in self.frames:
+        for i in range(0, len(frame), 4):  # 4 bytes per frame (2 bytes per channel)
+            left_channel_frames.append(frame[i:i + 2])  # First 2 bytes for left channel
+            right_channel_frames.append(frame[i + 2:i + 4])  # Next 2 bytes for right channel
+
+    # Save the left channel audio
+    left_channel_path = "../MICRECORD/output3_left.wav"
+    with wave.open(left_channel_path, 'wb') as wf_left:
+        wf_left.setnchannels(1)  # Mono
+        wf_left.setsampwidth(pyaudio.PyAudio().get_sample_size(FORMAT))
+        wf_left.setframerate(RATE)
+        wf_left.writeframes(b''.join(left_channel_frames))
+    print(f"Left channel audio saved to {left_channel_path}")
+
+    # Save the right channel audio
+    right_channel_path = "../MICRECORD/output3_right.wav"
+    with wave.open(right_channel_path, 'wb') as wf_right:
+        wf_right.setnchannels(1)  # Mono
+        wf_right.setsampwidth(pyaudio.PyAudio().get_sample_size(FORMAT))
+        wf_right.setframerate(RATE)
+        wf_right.writeframes(b''.join(right_channel_frames))
+    print(f"Right channel audio saved to {right_channel_path}")
+
+
   
 
 def on_save_button_click(recorder):
