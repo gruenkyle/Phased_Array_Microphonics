@@ -10,34 +10,56 @@
 #
 #######################################
 
-# Import External Scripts # 
+# # Import External Scripts # 
 import conversion as con
 import distanceCalc as dc
 import figureCreate as fc
-import database as db
+import wavCollection as wc
+import generateCode as gc
 
 # Import Python Libraries #
 import numpy as np
+import pandas as pd
+import sys
 
-# FIELD VARIABLES # 
+def main():
+    
+    data = {
+        'SAD': [float(sys.argv[1])], 
+        'SOD': [float(sys.argv[2])],
+        'SAMRATE': 44000,
+        'MIC_COUNT': [int(sys.argv[3])], 
+        'TOTALSPREAD': [float(sys.argv[4])],
+        'TYPE': [str(sys.argv[5])],
+        'NOISE': [str(sys.argv[6])]
+    }
+    
+    recordingInformation = pd.DataFrame(data)
+    
+    CODE = gc.generate(recordingInformation['MIC_COUNT'].iloc[0], 
+                       recordingInformation['TYPE'].iloc[0], 
+                       recordingInformation['NOISE'].iloc[0])
+    
+    recordingInformation['CODE'] = CODE
 
-codes = db.getCodes() # Gather information about recording code 
-
-def algo(code):
-    recordingInformation = db.getInformation(code)
-    fc.generateDiagram(code)
-
+    fc.generateDiagram(recordingInformation)
+    
+    CODE = recordingInformation['CODE'].iloc[0]
+    
     FS = recordingInformation['SAMRATE'].iloc[0] # AVG number of samples obtained per second (Sample Rate)
     TOTAL_SPREAD = recordingInformation['TOTALSPREAD'].iloc[0] # Total Spread of Phased Array from Mic 1 -> Mic N
     MIC_COUNT = recordingInformation['MIC_COUNT'].iloc[0] # Total Number of Microphones 
-
+    
     SCALAR = TOTAL_SPREAD / (MIC_COUNT - 1) # Scalar Multiple For Equidistant Microphones
-
+    
     SYS_ADJ_DIST = recordingInformation['SAD'].iloc[0] # Adjacent Distance to Target from Left Most Microphone
     SYS_OPP_DIST = recordingInformation['SOD'].iloc[0] # Opposite Distance to Target from Left Most Microphone
 
     FORLOOPARR = np.arange(MIC_COUNT) # Iteration Array For Number of Microphones
 
+    # Record Audio 
+    wc.recordAudio(CODE, FS, MIC_COUNT)
+    
     # Calculate Mic Distances to Target Values # 
     Mic_Distance_Target = np.zeros(MIC_COUNT, dtype=float)
     Mic_Distance_Target = dc.calcDistance(TOTAL_SPREAD, MIC_COUNT, SYS_OPP_DIST, SYS_ADJ_DIST)
@@ -58,11 +80,11 @@ def algo(code):
 
     # Convert Wav Files into CSV Data and Store in mic_Signal_Cells #
     for mic in FORLOOPARR: 
-        file_path = "../MICRECORD/" + str(code) + "/INDIV/Mic" + str(mic + 1) + "_" + str(code) + ".wav" 
+        file_path = "../MICRECORD/" + CODE + "/INDIV/Mic" + str(mic + 1) + "_" + CODE + ".wav" 
         mic_Signal_Cells[mic] = con.convertWavCSV(file_path, FS)
-
+        
     # Generate Figure Displaying all Microphone Waves on MatPlot #
-    fc.multiFigure(mic_Signal_Cells, code)
+    fc.multiFigure(mic_Signal_Cells, recordingInformation)
 
     # Create Storage Array for Maximum lengths of each audio file #
     maxSignalArrLengths = np.zeros(MIC_COUNT, dtype=int)
@@ -89,14 +111,12 @@ def algo(code):
         micSumSignal = micSumSignal + mic_Signal_Cells[int(finalSummationMic)]
 
     # Create Summation Figure and Overlapping Figure #
-    fc.summationFigure(micSumSignal, code)
-    fc.overlappingFigure(micSumSignal, mic_Signal_Cells[minIndex], code)
+    fc.summationFigure(micSumSignal, recordingInformation)
+    fc.overlappingFigure(micSumSignal, mic_Signal_Cells[minIndex], recordingInformation)
 
     # Create Mic Signal Folder and Store Converted Summation CSV to Wav # 
-    folderPath = "../MICRECORD/" + str(code) + "/SUM/FinalAudio_" + str(code) + ".wav"
+    folderPath = "../MICRECORD/" + CODE + "/SUM/FinalAudio_" + CODE + ".wav"
     con.convertCSVWav(folderPath, micSumSignal, FS)
 
-
-for code in codes:
-    print("\nCurrent : " + str(code) + "\n")
-    algo(code)
+if __name__=='__main__':
+    main()

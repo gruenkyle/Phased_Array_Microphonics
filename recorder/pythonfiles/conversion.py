@@ -64,6 +64,6 @@ def convertCSVWav(file_path, micData, FS):
 
     # Convert file to Pandas Data frame to wavfile.write() method 
     df = pd.DataFrame(micData)
-    wavfile.write(file_path, FS, df.astype(np.int32).values)
+    wavfile.write(file_path, FS, df.astype(np.int16).values)
 
     

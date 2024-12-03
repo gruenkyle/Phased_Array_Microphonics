@@ -2,7 +2,7 @@ import os
 import sys
 
 def recNum(ID):
-    directories = next(os.walk('../RECORDING'))[1]
+    directories = next(os.walk('../MICRECORD'))[1]
     print(directories)
     print(len(directories))
     
@@ -57,7 +57,7 @@ def generate(MIC_COUNT, TYPE, NOISE):
         
     RECORDNUM = recNum(ID)
     
-    pathdir = "../RECORDING/" + str(RECORDNUM) + ID
+    pathdir = "../MICRECORD/" + str(RECORDNUM) + ID
     
     exist = os.path.isdir(pathdir)
     if (exist):
