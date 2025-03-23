@@ -30,6 +30,13 @@ def deviceIndex():
 
     return idx
 
+
+#def audio_callback(indata, outdata, frames, time, status):
+#    """Handles both recording and playback."""
+#    if status:
+#        print(f"Stream error: {status}")
+#    outdata[:] = indata  # Play back the recorded input in real time
+
 def audio_callback(indata, frames, time, status):
     """This function is called in real time when new audio data is available."""
     if status:
