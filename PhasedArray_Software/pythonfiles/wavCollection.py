@@ -7,7 +7,7 @@ import os
 
 duration = 10
 SAMRATE = 44100  # Sample rate
-MIC_COUNT = 2  # Adjust based on your setup
+MIC_COUNT = 1  # Adjust based on your setup
 CODE = "test_recording"
 
 output_dir = f"../MICRECORD/{CODE}/INDIV/"
@@ -79,3 +79,4 @@ def recordAudio():
         write(filename, SAMRATE, channel_data)
         print(f"Channel {channel + 1} saved to {filename}")
 
+recordAudio()
