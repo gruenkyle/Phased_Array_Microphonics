@@ -7,7 +7,7 @@ import os
 
 duration = 10
 SAMRATE = 44100  # Sample rate
-MIC_COUNT = 1  # Adjust based on your setup
+MIC_COUNT = 2  # Adjust based on your setup
 CODE = "test_recording"
 
 output_dir = f"../MICRECORD/{CODE}/INDIV/"
@@ -17,7 +17,8 @@ audio_queue = queue.Queue()
 
 
 def deviceIndex():
-    target_name = "IN 1-4 (BEHRINGER UMC 404HD 192"
+    # target_name = "IN 1-4 (BEHRINGER UMC 404HD 192"
+    target_name = "Microphone Array (Intel® Smart"
     target_host_api = "MME"
 
     for idx, device in enumerate(sd.query_devices()):
@@ -38,11 +39,15 @@ def deviceIndex():
 #    outdata[:] = indata  # Play back the recorded input in real time
 
 def audio_callback(indata, frames, time, status):
-    """This function is called in real time when new audio data is available."""
     if status:
         print(f"Stream error: {status}")
-    audio_queue.put(indata.copy())  # Store audio data for later saving
-    sd.play(indata)  # Live playback of input audio
+    audio_queue.put(indata.copy())
+
+    # Pick one channel only to play
+    mono = indata[:, 0]
+    sd.play(mono, samplerate=SAMRATE, device=3)
+
+
 
 def recordAudio():
     device_idx = deviceIndex()
@@ -54,11 +59,12 @@ def recordAudio():
     print(f"Recording {MIC_COUNT} channels live for {duration} seconds...")
 
     # Open input-output stream
-    with sd.Stream(
+    with sd.InputStream(
         samplerate=SAMRATE,
         channels=MIC_COUNT,
         dtype='int16',
-        callback=audio_callback
+        callback=audio_callback,
+        device=device_idx
     ):
         sd.sleep(duration * 1000)  # Keep the script running while streaming
 
