@@ -5,6 +5,16 @@ from scipy.io.wavfile import write
 import queue
 import os
 
+
+"""
+Things to do:
+1. We need to configure this so that it works with multiple mics
+    a. Maybe have the user set how many mics they have, but ensure that the output can handle it
+2. Have stereo (or anything better) playback - rn it's just mono
+3. The beginning of the recording still kind of stutters - it's a non-issue but we should still work on it
+4. Have the processing done on it before outputting - might be out of scope tho.
+"""
+
 # === Configuration ===
 duration = 10  # seconds
 SAMRATE = 44100  # Sample rate
