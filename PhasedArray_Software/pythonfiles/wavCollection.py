@@ -5,7 +5,6 @@ from scipy.io.wavfile import write
 import queue
 import os
 
-
 """
 Things to do:
 1. We need to configure this so that it works with multiple mics
@@ -16,133 +15,143 @@ Things to do:
 """
 
 # === Configuration ===
-duration = 10  # seconds
 SAMRATE = 44100  # Sample rate
-MIC_COUNT = 2  # Number of input channels (microphones)
-OUTPUT_DEVICE_INDEX = 4  # Change this to your speaker index (run the tempCodeRunner.py)
+DURATION = 10  # Duration of recording in seconds
 CODE = "test_recording"
-
-#output_dir = f"../MICRECORD/{CODE}/INDIV/"
-output_dir = "./output/"
-os.makedirs(output_dir, exist_ok=True)
+OUTPUT_DIR = "./output/"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # === Queues for recording and playback ===
 record_queue = queue.Queue()
 playback_queue = queue.Queue()
 
-# === Find input device index ===
-def deviceIndex():
-    '''
-    Find the input device index (we should make something similar for output index tho)
-    '''
-    target_name = "Microphone Array (Intel® Smart"
-    target_host_api = "MME"
+# === Choose devices and mic settings ===
+def choose_input_device():
+    print("\nAvailable input devices:\n")
+    for idx, dev in enumerate(sd.query_devices()):
+        if dev['max_input_channels'] > 0:
+            print(f"{idx}: {dev['name']} - {dev['max_input_channels']} channels")
 
-    for idx, device in enumerate(sd.query_devices()):
-        host_api_name = sd.query_hostapis()[device['hostapi']]['name']
-        if target_name in device['name'] and target_host_api in host_api_name:
-            print(f"Target device found: Index {idx} -> {device['name']} ({host_api_name})")
-            return idx
-    print("Target device not found.")
-    return None
+    device_index = int(input("\nEnter the index of your INPUT device: "))
+    max_channels = sd.query_devices(device_index)['max_input_channels']
+    mic_count = int(input(f"How many microphones (1 to {max_channels}): "))
+    return device_index, mic_count
 
-# === Input callback ===
+def choose_output_device():
+    print("\nAvailable output devices:\n")
+    for idx, dev in enumerate(sd.query_devices()):
+        if dev['max_output_channels'] > 0:
+            print(f"{idx}: {dev['name']} - {dev['max_output_channels']} channels")
+
+    return int(input("\nEnter the index of your OUTPUT (playback) device: "))
+
+def choose_playback_option(mic_count):
+    print("\nPlayback options:")
+    for i in range(mic_count):
+        print(f"{i}: Listen to Mic {i+1}")
+    print(f"{mic_count}: Mix all microphones")
+    return int(input("Choose playback option: "))
+
+# === Audio callback function ===
 def audio_callback(indata, frames, time, status):
-    '''
-    put the audio in the queues - one to play back and one to record
-    '''
     if status:
         print(f"Stream error: {status}")
     record_queue.put(indata.copy())
     playback_queue.put(indata.copy())
 
 # === Playback thread ===
-def playback_thread():
-    '''
-    This thread runs below, it does the actual playback
-    '''
-    print("Using output device:", sd.query_devices(OUTPUT_DEVICE_INDEX)['name']) #make sure these are headphones to avoid feedback!
+def playback_thread(output_device_index, mic_count, playback_choice):
+    print("Playback thread started...")
+
     try:
         with sd.OutputStream(
             samplerate=SAMRATE,
             channels=1,
             dtype='float32',
-            device=OUTPUT_DEVICE_INDEX
+            device=output_device_index
         ) as stream:
             while True:
                 data = playback_queue.get()
                 if data is None:
                     break
-                mono = data[:, 0].astype(np.float32) / 32768.0
+
+                if playback_choice == mic_count:  # Mix all
+                    mono = np.mean(data.astype(np.float32) / 32768.0, axis=1)
+                else:  # Specific mic channel
+                    mono = data[:, playback_choice].astype(np.float32) / 32768.0
+
                 stream.write(mono)
     except Exception as e:
         print(f"Playback error: {e}")
 
 # === Main function ===
-def recordAudio():
-    '''
-    Main function to record audio
-    '''
-    device_idx = deviceIndex()
-    if device_idx is None:
-        return
+def record_audio():
+    input_device_index, mic_count = choose_input_device()
+    output_device_index = choose_output_device()
+    playback_choice = choose_playback_option(mic_count)
 
     # Start playback thread
-    thread = threading.Thread(target=playback_thread) # this is where the thread starts - it runs in the background
+    thread = threading.Thread(target=playback_thread, args=(output_device_index, mic_count, playback_choice))
     thread.start()
 
-    print(f"Recording {MIC_COUNT} channels live for {duration} seconds...")
+    print(f"\nRecording {mic_count} channels for {DURATION} seconds...\n")
 
-    # take in the audio
+    # Start recording
     with sd.InputStream(
         samplerate=SAMRATE,
-        channels=MIC_COUNT,
+        channels=mic_count,
         dtype='int16',
         callback=audio_callback,
-        device=device_idx
+        device=input_device_index
     ):
-        sd.sleep(duration * 1000)
+        sd.sleep(DURATION * 1000)
 
-    print("Recording complete! Saving audio...")
+    print("\nRecording complete! Saving audio files...")
 
-    # Stop the playback thread
+    # Stop playback thread
     playback_queue.put(None)
     thread.join()
 
-    # Gather recorded chunks
+    # Collect recorded audio chunks
     recorded_audio = []
     while not record_queue.empty():
         recorded_audio.append(record_queue.get())
 
     if not recorded_audio:
-        print("No audio was recorded.")
+        print("No audio recorded.")
         return
 
-    # Concatenate and save
+    # Concatenate all audio chunks
     audio_data = np.concatenate(recorded_audio, axis=0)
-    print("Total frames recorded:", audio_data.shape[0])
+    print(f"Total frames recorded: {audio_data.shape[0]}")
 
-    # Save individual channels
-    for channel in range(MIC_COUNT):
+    # Save full multi-channel audio
+    full_file = f"{OUTPUT_DIR}/All_Mics_{CODE}.wav"
+    write(full_file, SAMRATE, audio_data)
+    print(f"Saved all channels to: {full_file}")
+
+    # Save individual mic channels
+    for channel in range(mic_count):
         channel_data = audio_data[:, channel]
-        filename = f"{output_dir}/Mic{channel + 1}_{CODE}.wav"
+        filename = f"{OUTPUT_DIR}/Mic{channel + 1}_{CODE}.wav"
         write(filename, SAMRATE, channel_data)
-        print(f"Channel {channel + 1} saved to {filename}")
+        print(f"Saved Mic {channel + 1} to: {filename}")
 
+    print("\n✅ All done!\n")
 
+# === Optional Speaker Test ===
 def test_speaker():
-    '''
-    Function to test speakers. If you hear a tone, it's working.
-    '''
-    print("starting....")
+    print("Testing output speaker...")
     duration = 1
     t = np.linspace(0, duration, int(SAMRATE * duration), endpoint=False)
     tone = 0.5 * np.sin(2 * np.pi * 440 * t)  # A4 tone
-    sd.play(tone, samplerate=SAMRATE, device=OUTPUT_DEVICE_INDEX)
+    sd.play(tone, samplerate=SAMRATE)
     sd.wait()
-    
+    print("Speaker test complete!")
 
-#test_speaker()
-recordAudio()
-#print("Output directory:", os.path.abspath(output_dir))
+# === Run ===
+if __name__ == "__main__":
+    record_audio()
+    # test_speaker()  # Uncomment to test speaker
+
 
