@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
         self.ui.refreshList.clicked.connect(self.refresh_list)
         self.ui.saveButton.clicked.connect(self.save_settings)
         self.ui.deleteFile.clicked.connect(self.delete_selected_file)
-        self.ui.recordButton.clicked.connect(self.run_script)
+        self.ui.recordButton.clicked.connect(self.record_live)
 
         # Initialize dropdowns for type and noise
         self.init_type_dropdown()
@@ -134,7 +134,16 @@ class MainWindow(QMainWindow):
             f"\tTotal Spread: {self.total_spread}\n\tType: {self.type}\n\tNoise: {self.noise}"
         )
 
-    # Run the selected script with user inputs
+    def record_live(self):
+        try:
+            script_path = os.path.abspath(os.path.join("PhasedArray_Software", "pythonfiles", "wavCollection.py"))
+            self.ui.consoleLog.append("Launching real-time recording script...")
+            subprocess.Popen([sys.executable, script_path], shell=False)
+        except Exception as e:
+            self.ui.consoleLog.append(f"Error launching recording: {e}")
+
+    # Run the selected script with user inputs 
+    # THIS IS CURRENTLY NOT BEING USED SINCE RECORD USES wavCollection.py
     def run_script(self):
         selected_item = self.ui.listView.currentItem()
 
